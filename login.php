@@ -14,9 +14,14 @@ if (isset($_POST['login'])) {
     $result = $stmt->get_result();
 
     if ($result->num_rows > 0) {
-        $_SESSION['username'] = $username;
-        header('Location: dashboard.php');
-        exit();
+        $row = $result->fetch_assoc();
+        if (($row['Name'] == 'Surya Alam' && $row['EmployeeID'] == 'MASTER') || ($row['Name'] == 'Alif Satriadi' && $row['EmployeeID'] == 'MANAGE')) {
+            $_SESSION['username'] = $username;
+            header('Location: dashboard.php');
+            exit();
+        } else {
+            $error_message = "Invalid username or password.";
+        }
     } else {
         $error_message = "Invalid username or password.";
     }
