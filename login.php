@@ -35,22 +35,29 @@ if (isset($_POST['login'])) {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login</title>
     <link rel="stylesheet" href="styles.css">
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
 </head>
-<body>
-    <div class="container">
-        <h1>Login</h1>
-        <?php
-        if (isset($error_message)) {
-            echo '<p class="error">' . htmlspecialchars($error_message) . '</p>';
-        }
-        ?>
-        <form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" method="post">
-            <label for="username">Username:</label><br>
-            <input type="text" id="username" name="username" required><br>
-            <label for="password">Password:</label><br>
-            <input type="password" id="password" name="password" required><br><br>
-            <input type="submit" name="login" value="Login">
-        </form>
-    </div>
+<body class="bg-gray-100">
+
+<div class="container mx-auto mt-8">
+    <h1 class="text-3xl font-bold mb-4 text-center">Login</h1>
+
+    <?php
+    if (isset($error_message)) {
+        echo '<p class="error text-center">' . htmlspecialchars($error_message) . '</p>';
+    }
+    ?>
+
+    <form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" method="post" class="text-center">
+        <label for="username">Username:</label><br>
+        <input type="text" id="username" name="username" required class="border border-gray-300 rounded-md px-3 py-2 mt-2 focus:outline-none focus:ring focus:border-blue-500 w-64"><br>
+        <label for="password" class="mt-4">Password:</label><br>
+        <input type="password" id="password" name="password" required class="border border-gray-300 rounded-md px-3 py-2 mt-2 focus:outline-none focus:ring focus:border-blue-500 w-64"><br><br>
+        <input type="submit" name="login" value="Login" class="inline-block px-4 py-2 rounded-md bg-blue-500 text-white hover:bg-blue-600">
+    </form>
+</div>
+
+<?php include 'layout/footer.html'; ?>
+
 </body>
 </html>

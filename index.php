@@ -5,26 +5,31 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Homepage</title>
     <link rel="stylesheet" href="styles.css">
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
 </head>
-<body>
-    <div class="container">
-        <h1>Welcome to the Homepage</h1>
+<body class="bg-gray-100">
 
-        <?php
-        session_start();
+<div class="container mx-auto mt-8">
+    <h1 class="text-3xl font-bold mb-4 text-center">Welcome to the Quantum TCG Store Database</h1>
 
-        // Include login.php for login functionality
-        include 'login.php';
+    <?php
+    session_start();
 
-        // Display user info or login form based on session
-        if (isset($_SESSION['username'])) {
-            echo '<p>Hello, ' . htmlspecialchars($_SESSION['username']) . '!</p>';
-            echo '<p><a href="logout.php">Logout</a></p>';
-        } else {
-            // Display login form (already handled in login.php)
-        }
-        ?>
+    // Include login.php for login functionality
+    include 'login.php';
 
-    </div>
+    // Display user info or login form based on session
+    if (isset($_SESSION['username'])) {
+        echo '<p class="text-center">Hello, ' . htmlspecialchars($_SESSION['username']) . '!</p>';
+        echo '<p class="text-center mt-4"><a href="logout.php" class="inline-block px-4 py-2 rounded-md bg-blue-500 text-white hover:bg-blue-600">Logout</a></p>';
+    } else {
+        // Display login form (already handled in login.php)
+    }
+    ?>
+
+</div>
+
+<?php include 'layout/footer.html'; ?>
+
 </body>
 </html>

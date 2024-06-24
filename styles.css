@@ -1,0 +1,56 @@
+/* styles.css */
+.container {
+    max-width: 800px; /* Lebar maksimum container */
+    margin: 0 auto; /* Memposisikan container di tengah */
+    padding: 20px; /* Padding untuk ruang di sekitar konten */
+}
+
+h1 {
+    text-align: center; /* Pusatkan teks h1 */
+}
+
+h2 {
+    text-align: center; /* Pusatkan teks h2 */
+}
+
+.category-links {
+    text-align: center; /* Pusatkan teks tautan kategori */
+}
+
+.category-links ul {
+    list-style-type: none; /* Hilangkan bullet dari daftar */
+    padding: 0;
+}
+
+.category-links li {
+    display: inline-block; /* Tampilkan tautan kategori dalam satu baris */
+    margin: 0 10px; /* Jarak antara tautan kategori */
+}
+
+.category-links li a {
+    text-decoration: none; /* Hilangkan underline dari tautan */
+    padding: 5px 10px; /* Padding untuk area klik */
+    border: 1px solid #333; /* Garis tepi */
+    border-radius: 5px; /* Sudut melengkung */
+    background-color: #f0f0f0; /* Warna latar belakang */
+    color: #333; /* Warna teks */
+}
+
+.category-links li a:hover {
+    background-color: #ddd; /* Warna latar belakang saat hover */
+}
+
+p {
+    text-align: center; /* Pusatkan teks paragraf */
+    margin-top: 20px; /* Jarak atas paragraf */
+}
+
+footer {
+    background-color: #333; /* Warna latar belakang footer */
+    color: #fff; /* Warna teks footer */
+    text-align: center; /* Pusatkan teks footer */
+    padding: 20px; /* Padding untuk ruang di sekitar konten footer */
+    position: fixed; /* Tetapkan posisi footer */
+    bottom: 0; /* Tempatkan di bagian bawah layar */
+    width: 100%; /* Lebar footer 100% dari layar */
+}
