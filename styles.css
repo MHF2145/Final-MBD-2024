@@ -46,11 +46,15 @@ p {
 }
 
 footer {
-    background-color: #333; /* Warna latar belakang footer */
+    background-color: #000000; /* Warna latar belakang footer */
     color: #fff; /* Warna teks footer */
     text-align: center; /* Pusatkan teks footer */
     padding: 20px; /* Padding untuk ruang di sekitar konten footer */
-    position: fixed; /* Tetapkan posisi footer */
+    position: absolute; /* Tetapkan posisi footer */
     bottom: 0; /* Tempatkan di bagian bawah layar */
     width: 100%; /* Lebar footer 100% dari layar */
+    padding-left: 0%;
+    height: 60px;
+    padding-top: 1px;
 }
+

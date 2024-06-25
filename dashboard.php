@@ -17,6 +17,13 @@ if (!isset($_SESSION['username'])) {
     <title>Dashboard</title>
     <link rel="stylesheet" href="styles.css">
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <style>
+        body {
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+    </style>
 </head>
 
 <body class="bg-gray-100">
@@ -43,7 +50,9 @@ if (!isset($_SESSION['username'])) {
         <a href="confirmation.php" class="inline-block px-4 py-2 rounded-md bg-blue-500 text-white hover:bg-blue-600">Logout</a>
     </p>
 
-    <?php include 'layout/footer.html'; ?>
+    <footer class="text-white text-center">
+        <?php include 'layout/footer.html'; ?>
+    </footer>
 
 </body>
 
