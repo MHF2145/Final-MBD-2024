@@ -14,11 +14,19 @@ if (isset($_GET['delete_id'])) {
     exit;
 }
 
-// Fetch all merchandise items
-$sql = 'SELECT * FROM Merchandise';
-$statement = $pdo->prepare($sql);
-$statement->execute();
-$items = $statement->fetchAll();
+$searchTerm = isset($_GET['q']) ? $_GET['q'] : '';
+
+if ($searchTerm) {
+    $sql = 'SELECT * FROM Merchandise WHERE Name LIKE ?';
+    $statement = $pdo->prepare($sql);
+    $statement->execute(['%' . $searchTerm . '%']);
+    $items = $statement->fetchAll();
+} else {
+    $sql = 'SELECT * FROM Merchandise';
+    $statement = $pdo->prepare($sql);
+    $statement->execute();
+    $items = $statement->fetchAll();
+}
 ?>
 
 <!DOCTYPE html>
@@ -30,6 +38,10 @@ $items = $statement->fetchAll();
 </head>
 <body>
     <h1>Merchandise</h1>
+    <form action="index.php" method="GET">
+        <input type="text" name="q" placeholder="Search by Item Name" value="<?= htmlspecialchars($searchTerm) ?>">
+        <button type="submit">Search</button>
+    </form>
     <table>
         <tr>
             <th>Item ID</th>

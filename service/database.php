@@ -14,6 +14,6 @@ if ($db->connect_error) {
     die("error! ");
 }
 
-echo "we bisa cok";
+echo "DB Connected!";
 
 ?>

@@ -1,24 +1,33 @@
 <?php
 include '../../../service/db.php';
 
-// Handle delete request
-if (isset($_GET['delete_id'])) {
-    $delete_id = $_GET['delete_id'];
+$searchTerm = isset($_GET['q']) ? $_GET['q'] : '';
 
-    $sql = 'DELETE FROM Menu WHERE MenuId = ?';
+if ($searchTerm) {
+    $sql = 'SELECT * FROM Menu WHERE MenuName LIKE ?';
     $statement = $pdo->prepare($sql);
-    $statement->execute([$delete_id]);
+    $statement->execute(['%' . $searchTerm . '%']);
+    $items = $statement->fetchAll();
+} else {
+    // Handle delete request
+    if (isset($_GET['delete_id'])) {
+        $delete_id = $_GET['delete_id'];
 
-    // Redirect back to this page after deletion
-    header('Location: index.php');
-    exit;
+        $sql = 'DELETE FROM Menu WHERE MenuId = ?';
+        $statement = $pdo->prepare($sql);
+        $statement->execute([$delete_id]);
+
+        // Redirect back to this page after deletion
+        header('Location: index.php');
+        exit;
+    }
+
+    // Fetch all menu items
+    $sql = 'SELECT * FROM Menu';
+    $statement = $pdo->prepare($sql);
+    $statement->execute();
+    $items = $statement->fetchAll();
 }
-
-// Fetch all menu items
-$sql = 'SELECT * FROM Menu';
-$statement = $pdo->prepare($sql);
-$statement->execute();
-$items = $statement->fetchAll();
 ?>
 
 <!DOCTYPE html>
@@ -30,6 +39,10 @@ $items = $statement->fetchAll();
 </head>
 <body>
     <h1>Menu</h1>
+    <form action="index.php" method="GET">
+        <input type="text" name="q" placeholder="Search by Menu Name" value="<?= htmlspecialchars($searchTerm) ?>">
+        <button type="submit">Search</button>
+    </form>
     <table>
         <tr>
             <th>Menu ID</th>

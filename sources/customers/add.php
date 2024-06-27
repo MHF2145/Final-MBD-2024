@@ -11,7 +11,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $statement = $pdo->prepare($sql);
     $statement->execute([$id, $name, $phone, $membershipID ?: NULL]); // Use NULL if membershipID is empty
 
-    header('Location: index.php');
+    header('Location: customers.php');
 }
 ?>
 

@@ -1,75 +1,144 @@
 -- Data
 
 -- Employees
-INSERT INTO Employees (EmployeeID, Name, Gender, PhoneNumber, Email, Age)
-VALUES 
-    ('EMP001', 'Josiah Galenos', 'Male', '123-456-7890', 'joshgale21@gmail.com', 35),
-    ('EMP002', 'Tullia Anna', 'Female', '987-654-3210', 'tulip256@yahoo.com', 28),
-    ('EMP003', 'Judikael Godehard', 'Male', '555-555-5555', 'kael123@gmail.com', 40),
-    ('EMP004', 'Debbora Antonieta', 'Female', '777-777-7777', 'debby27@gmail.com', 32),
-    ('EMP005', 'Igino Yedidyah', 'Male', '888-888-8888', 'Igiyhah9@yahoo.com', 29);
+INSERT INTO Employees (EmployeeID, Name, Gender, PhoneNumber, Email, Age) VALUES
+('MASTER', 'Surya Alam', 'Male', '123-876-7890', 'gale21@gmail.com', 20),
+('MANAGE', 'Alif Satriadi', 'Male', '123-434-7890', 'joshe21@gmail.com', 20),
+('E00001', 'Alice Smith', 'Female', '081234567890', 'alice@example.com', 28),
+('E00002', 'Bob Johnson', 'Male', '081234567891', 'bob@example.com', 32),
+('E00003', 'Charlie Davis', 'Male', '081234567892', 'charlie@example.com', 29),
+('E00004', 'David Wilson', 'Male', '081234567893', 'david@example.com', 35),
+('E00005', 'Eva Brown', 'Female', '081234567894', 'eva@example.com', 26),
+('E00006', 'Frank Miller', 'Male', '081234567895', 'frank@example.com', 40),
+('E00007', 'Grace Lee', 'Female', '081234567896', 'grace@example.com', 30),
+('E00008', 'Hannah Taylor', 'Female', '081234567897', 'hannah@example.com', 27),
+('E00009', 'Ian Anderson', 'Male', '081234567898', 'ian@example.com', 33),
+('E00010', 'Julia Thomas', 'Female', '081234567899', 'julia@example.com', 31);
 
 -- Membership
-INSERT INTO Membership (MembershipID, CustomerID, Rank, JoinDate)
-VALUES 
-    ('MEM001', 'CUS001', 'Gold', '2023-04-15'),
-    ('MEM002', 'CUS002', 'Silver', '2023-05-20'),
-    ('MEM003', 'CUS003', 'Bronze', '2023-06-10'),
-    ('MEM004', 'CUS004', 'Silver', '2023-07-03'),
-    ('MEM005', 'CUS005', 'Bronze', '2023-08-18'),
-    ('MEM006', 'CUS006', 'Gold', '2023-09-05');
+INSERT INTO Membership (MembershipID, CustomerID, Rank, JoinDate) VALUES
+('M00001', 'C00001', 'Gold', '2023-01-01 10:00:00'),
+('M00002', 'C00002', 'Silver', '2023-01-02 11:00:00'),
+('M00003', 'C00003', 'Gold', '2023-01-03 12:00:00'),
+('M00004', 'C00004', 'Bronze', '2023-01-04 13:00:00'),
+('M00005', 'C00005', 'Silver', '2023-01-05 14:00:00'),
+('M00006', 'C00006', 'Gold', '2023-01-06 15:00:00'),
+('M00007', 'C00007', 'Bronze', '2023-01-07 16:00:00'),
+('M00008', 'C00008', 'Silver', '2023-01-08 17:00:00'),
+('M00009', 'C00009', 'Gold', '2023-01-09 18:00:00'),
+('M00010', 'C00010', 'Bronze', '2023-01-10 19:00:00');
+
 
 -- Customers
-INSERT INTO Customers (CustomerID, Name, PhoneNumber, Membership_MembershipID)
-VALUES 
-    ('CUS001', 'Alice Johnson', '111-111-1111', 'MEM001'),
-    ('CUS002', 'Bob Smith', '222-222-2222', 'MEM002'),
-    ('CUS003', 'Eva Davis', '333-333-3333', 'MEM003'),
-    ('CUS004', 'Jack Wilson', '444-444-4444', 'MEM004'),
-    ('CUS005', 'Sophia Brown', '555-555-5555', 'MEM005'),
-    ('CUS006', 'David Taylor', '666-666-6666', 'MEM006');
+INSERT INTO Customers (CustomerID, Name, PhoneNumber, Membership_MembershipID) VALUES
+('C00001', 'Customer1', '0811111111', 'M00001'),
+('C00002', 'Customer2', '0811111112', 'M00002'),
+('C00003', 'Customer3', '0811111113', 'M00003'),
+('C00004', 'Customer4', '0811111114', 'M00004'),
+('C00005', 'Customer5', '0811111115', 'M00005'),
+('C00006', 'Customer6', '0811111116', 'M00006'),
+('C00007', 'Customer7', '0811111117', 'M00007'),
+('C00008', 'Customer8', '0811111118', 'M00008'),
+('C00009', 'Customer9', '0811111119', 'M00009'),
+('C00010', 'Customer10', '0811111120', 'M00010'),
+('C00011', 'Customer11', '0811111121', NULL),
+('C00012', 'Customer12', '0811111122', NULL),
+('C00013', 'Customer13', '0811111123', NULL),
+('C00014', 'Customer14', '0811111124', NULL),
+('C00015', 'Customer15', '0811111125', NULL),
+('C00016', 'Customer16', '0811111126', NULL),
+('C00017', 'Customer17', '0811111127', NULL),
+('C00018', 'Customer18', '0811111128', NULL),
+('C00019', 'Customer19', '0811111129', NULL),
+('C00020', 'Customer20', '0811111130', NULL),
+('C00021', 'Customer21', '0811111131', NULL),
+('C00022', 'Customer22', '0811111132', NULL),
+('C00023', 'Customer23', '0811111133', NULL),
+('C00024', 'Customer24', '0811111134', NULL),
+('C00025', 'Customer25', '0811111135', NULL),
+('C00026', 'Customer26', '0811111136', NULL),
+('C00027', 'Customer27', '0811111137', NULL),
+('C00028', 'Customer28', '0811111138', NULL),
+('C00029', 'Customer29', '0811111139', NULL),
+('C00030', 'Customer30', '0811111140', NULL),
+('C00031', 'Customer31', '0811111141', NULL),
+('C00032', 'Customer32', '0811111142', NULL),
+('C00033', 'Customer33', '0811111143', NULL),
+('C00034', 'Customer34', '0811111144', NULL),
+('C00035', 'Customer35', '0811111145', NULL),
+('C00036', 'Customer36', '0811111146', NULL),
+('C00037', 'Customer37', '0811111147', NULL),
+('C00038', 'Customer38', '0811111148', NULL),
+('C00039', 'Customer39', '0811111149', NULL),
+('C00040', 'Customer40', '0811111150', NULL),
+('C00041', 'Customer41', '0811111151', NULL),
+('C00042', 'Customer42', '0811111152', NULL),
+('C00043', 'Customer43', '0811111153', NULL),
+('C00044', 'Customer44', '0811111154', NULL),
+('C00045', 'Customer45', '0811111155', NULL),
+('C00046', 'Customer46', '0811111156', NULL),
+('C00047', 'Customer47', '0811111157', NULL),
+('C00048', 'Customer48', '0811111158', NULL),
+('C00049', 'Customer49', '0811111159', NULL),
+('C00050', 'Customer50', '0811111160', NULL);
+
+
 
 -- CardCatalogue
-INSERT INTO CardCatalogue (CardID, CardName, CardType, CardPrice, CardStock)
-VALUES 
-    ('PKMN01', 'Pokemon Sword and Shield "VSTAR UNIVERSE"', 'Booster Pack', 170000.00, 10),
-    ('PKMN02', 'Pokemon Scarlet and Violet "Quaxly & Mimikyu ex"', 'Starter Decks', 20000.00, 50),
-    ('PKMN03', 'Pokemon Sword and Shield "25th Anniversary Collection', 'Booster Pack', 75000.00, 26),
-    ('YGO001', 'Starter Deck Codebreaker', 'Starter Deck', 15000.00, 120),
-    ('YGO002', 'Yu-Gi-Oh! "Wild Survivors"', 'Booster Pack', 50000.00, 100),
-    ('YGO003', 'Yu-Gi-Oh! "Dimension Force"', 'Booster Pack', 37000.00, 80),
-    ('MTG001', 'MTG "Murder at Karlov Manor', 'Play Booster', 500000.00, 7),
-    ('MTG002', 'MTG "The Lost Cavern of IXALANT"', 'Bundle Pack', 1300000.00, 5),
-    ('MTG003', 'MTG "Wild of Eldraine', 'Booster Display', 290000.00, 20);
+INSERT INTO CardCatalogue (CardID, CardName, CardType, CardPrice, CardStock) VALUES
+('C00001', 'Booster Pack A', 'Booster Pack', 30000.00, 100),
+('C00002', 'Booster Pack B', 'Booster Pack', 30000.00, 150),
+('C00003', 'Limited Card A', 'Limited Card', 35000.00, 50),
+('C00004', 'Limited Card B', 'Limited Card', 35000.00, 75),
+('C00005', 'Card Deck A', 'Card Deck', 45000.00, 200),
+('C00006', 'Card Deck B', 'Card Deck', 45000.00, 150),
+('C00007', 'Booster Pack C', 'Booster Pack', 30000.00, 80),
+('C00008', 'Booster Pack D', 'Booster Pack', 30000.00, 120),
+('C00009', 'Limited Card C', 'Limited Card', 35000.00, 60),
+('C00010', 'Limited Card D', 'Limited Card', 35000.00, 70);
 
 -- Merchandise
-INSERT INTO Merchandise (ItemID, Name, Type, Price, MerchStock)
-VALUES 
-    ('MCH001', 'Pokemon Booster Pack', 'Trading Card Game', 40000.99, 200),
-    ('MCH002', 'Yu-Gi-Oh! Starter Deck', 'Trading Card Game', 40000.99, 150),
-    ('MCH003', 'Magic: The Gathering Deck Box', 'Accessories', 15000.50, 100),
-    ('MCH004', 'Pokemon Playmat', 'Accessories', 19000.99, 80),
-    ('MCH005', 'Yu-Gi-Oh! Card Sleeves', 'Accessories', 5000.99, 120),
-    ('MCH006', 'Magic: The Gathering Dice Set', 'Accessories', 12000.99, 50),
-    ('MCH007', 'Pokemon Collectible Figure', 'Collectibles', 70000.99, 90);
+INSERT INTO Merchandise (ItemID, Name, Type, Price, MerchStock) VALUES
+('M00001', 'Merchandise A', 'T-shirt', 30000.00, 100),
+('M00002', 'Merchandise B', 'Mug', 10000.00, 200),
+('M00003', 'Merchandise C', 'Poster', 5000.00, 150),
+('M00004', 'Merchandise D', 'Hat', 15000.00, 50),
+('M00005', 'Merchandise E', 'Keychain', 15000.00, 300),
+('M00006', 'Merchandise F', 'Sticker', 20000.00, 400),
+('M00007', 'Merchandise G', 'Notebook', 230000.00, 250),
+('M00008', 'Merchandise H', 'Pen', 130000.00, 500),
+('M00009', 'Merchandise I', 'Bag', 360000.00, 100),
+('M00010', 'Merchandise J', 'Phone Case', 10000.00, 120);
 
 -- Menu
-INSERT INTO Menu (MenuId, MenuName, MenuType, MenuPrice, MenuStock)
-VALUES 
-    ('MNU001', 'Iced Coffee', 'Drink', 3000.00, 100),
-    ('MNU002', 'Club Sandwich', 'Food', 10000.50, 75),
-    ('MNU003', 'Green Tea', 'Drink', 6000.75, 50),
-    ('MNU004', 'Caesar Salad', 'Food', 17000.99, 80),
-    ('MNU005', 'Orange Juice', 'Drink', 5000.99, 120),
-    ('MNU006', 'Margherita Pizza', 'Food', 20000.50, 60),
-    ('MNU007', 'Milkshake', 'Drink', 8000.75, 90);
+INSERT INTO Menu (MenuId, MenuName, MenuType, MenuPrice, MenuStock) VALUES
+('F00001', 'Nasi Goreng', 'Makanan', 25000, 50),
+('F00002', 'Mie Goreng', 'Makanan', 20000, 50),
+('F00003', 'Sate Ayam', 'Makanan', 30000, 50),
+('F00004', 'Bakso', 'Makanan', 15000, 50),
+('F00005', 'Rendang', 'Makanan', 35000, 50),
+('F00006', 'Soto Ayam', 'Makanan', 18000, 50),
+('F00007', 'Gado-Gado', 'Makanan', 15000, 50),
+('F00008', 'Ayam Goreng', 'Makanan', 22000, 50),
+('F00009', 'Nasi Padang', 'Makanan', 25000, 50),
+('F00010', 'Sop Buntut', 'Makanan', 40000, 50),
+('D00001', 'Es Teh Manis', 'Minuman', 5000, 100),
+('D00002', 'Es Jeruk', 'Minuman', 7000, 100),
+('D00003', 'Kopi Hitam', 'Minuman', 10000, 100),
+('D00004', 'Cappuccino', 'Minuman', 20000, 100),
+('D00005', 'Latte', 'Minuman', 22000, 100),
+('D00006', 'Es Kopi Susu', 'Minuman', 18000, 100),
+('D00007', 'Jus Alpukat', 'Minuman', 15000, 100),
+('D00008', 'Jus Mangga', 'Minuman', 15000, 100),
+('D00009', 'Air Mineral', 'Minuman', 3000, 200),
+('D00010', 'Teh Botol', 'Minuman', 6000, 100);
 
 -- Discount
 INSERT INTO Discount (DiscountID, DiscountType, DiscountRate)
 VALUES 
-    ('DIS001', 'Perunggu', 10.00),
-    ('DIS002', 'Perak', 15.00),
-    ('DIS003', 'Emas', 20.00),
+    ('DIS001', 'Bronze', 10.00),
+    ('DIS002', 'Silver', 15.00),
+    ('DIS003', 'Gold', 20.00),
     ('DIS004', 'Black Friday', 70.00),
     ('DIS005', 'Anniversary', 30.00),
     ('DIS006', 'Grand Opening', 20.00);
@@ -77,55 +146,51 @@ VALUES
 -- Transactions
 INSERT INTO Transactions (TransactionID, Date, TotalItems, TotalAmount, PaymentMethod, Employees_EmployeeID, Customers_CustomerID, Discount_DiscountID)
 VALUES 
-    ('TRS001', '2024-04-01 08:30:00', 3, 25.00, 'Cash', 'EMP001', 'CUS001', 'DIS001'),
-    ('TRS002', '2024-04-02 12:15:00', 2, 15.50, 'Credit Card', 'EMP002', 'CUS002', 'DIS002'),
-    ('TRS003', '2024-04-03 14:45:00', 5, 42.75, 'Debit Card', 'EMP003', 'CUS003', NULL),
-    ('TRS004', '2024-04-04 10:00:00', 1, 8.99, 'Cash', 'EMP004', 'CUS004', 'DIS003'),
-    ('TRS005', '2024-04-05 16:20:00', 4, 33.25, 'Credit Card', 'EMP005', 'CUS005', NULL),
-    ('TRS006', '2024-04-06 11:30:00', 2, 18.00, 'Cash', 'EMP001', 'CUS001', 'DIS004'),
-    ('TRS007', '2024-04-07 13:45:00', 3, 28.50, 'Credit Card', 'EMP002', 'CUS002', 'DIS005'),
-    ('TRS008', '2024-04-08 09:20:00', 1, 12.75, 'Debit Card', 'EMP003', 'CUS003', NULL),
-    ('TRS009', '2024-04-09 15:10:00', 4, 35.99, 'Cash', 'EMP004', 'CUS004', 'DIS001'),
-    ('TRS010', '2024-04-10 17:00:00', 2, 22.50, 'Credit Card', 'EMP005', 'CUS005', NULL);
+('T00001', '2024-06-01 10:00:00', 3, 96000.00, 'Credit Card', 'E00001', 'C00001', 'DIS003'),
+('T00002', '2024-06-02 11:00:00', 2, 63000.00, 'Cash', 'E00002', 'C00002', 'DIS002'),
+('T00003', '2024-06-03 12:00:00', 4, 112000.00, 'Debit Card', 'E00003', 'C00003', 'DIS004'),
+('T00004', '2024-06-04 13:00:00', 1, 13500.00, 'Cash', 'E00004', 'C00004', 'DIS001'),
+('T00005', '2024-06-05 14:00:00', 5, 153000.00, 'Credit Card', 'E00005', 'C00005', 'DIS005');
+
 
 -- Transactions_Merchandise
 INSERT INTO Transactions_Merchandise (Transactions_TransactionID, Merchandise_ItemID)
 VALUES 
-    ('TRS001', 'MCH001'),
-    ('TRS001', 'MCH002'),
-    ('TRS002', 'MCH003'),
-    ('TRS003', 'MCH004'),
-    ('TRS004', 'MCH005'),
-    ('TRS004', 'MCH006'),
-    ('TRS005', 'MCH007'),
-    ('TRS006', 'MCH005'),
-    ('TRS007', 'MCH003'),
-    ('TRS008', 'MCH002');
+('T00001', 'M00001'),
+('T00001', 'M00002'),
+('T00002', 'M00003'),
+('T00003', 'M00004'),
+('T00003', 'M00005'),
+('T00003', 'M00006'),
+('T00004', 'M00007'),
+('T00005', 'M00008'),
+('T00005', 'M00009'),
+('T00005', 'M00010');
+
 
 -- Transactions_Menu
 INSERT INTO Transactions_Menu (Transactions_TransactionID, Menu_MenuId)
 VALUES 
-    ('TRS001', 'MNU001'),
-    ('TRS001', 'MNU002'),
-    ('TRS010', 'MNU003'),
-    ('TRS003', 'MNU004'),
-    ('TRS004', 'MNU005'),
-    ('TRS009', 'MNU006'),
-    ('TRS005', 'MNU007'),
-    ('TRS010', 'MNU007'),
-    ('TRS007', 'MNU002'),
-    ('TRS008', 'MNU003');
+('T00001', 'F00001'),
+('T00001', 'D00001'),
+('T00002', 'F00002'),
+('T00003', 'F00003'),
+('T00003', 'F00004'),
+('T00003', 'D00002'),
+('T00004', 'F00005'),
+('T00005', 'F00006'),
+('T00005', 'F00007'),
+('T00005', 'D00003');
+
 
 -- CardCatalogue_Transactions
-INSERT INTO CardCatalogue_Transactions (CardCatalogue_CardID, Transactions_TransactionID)
+INSERT INTO Transactions_CardCatalogue (CardCatalogue_CardID, Transactions_TransactionID)
 VALUES 
-    ('PKMN01', 'TRS001'),
-    ('PKMN02', 'TRS001'),
-    ('PKMN03', 'TRS001'),
-    ('YGO001', 'TRS001'),
-    ('YGO002', 'TRS001'),
-    ('YGO003', 'TRS001'),
-    ('MTG001', 'TRS001'),
-    ('MTG002', 'TRS002'),
-    ('MTG003', 'TRS002');
+('C00001', 'T00001'),
+('C00002', 'T00001'),
+('C00003', 'T00002'),
+('C00004', 'T00003'),
+('C00005', 'T00004'),
+('C00006', 'T00005');
+
 

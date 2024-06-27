@@ -1,24 +1,19 @@
 <?php
 include '../../../service/db.php';
 
-// Handle delete request
-if (isset($_GET['delete_id'])) {
-    $delete_id = $_GET['delete_id'];
+$searchTerm = isset($_GET['q']) ? $_GET['q'] : '';
 
-    $sql = 'DELETE FROM CardCatalogue WHERE CardID = ?';
+if ($searchTerm) {
+    $sql = 'SELECT * FROM CardCatalogue WHERE CardName LIKE ?';
     $statement = $pdo->prepare($sql);
-    $statement->execute([$delete_id]);
-
-    // Redirect back to this page after deletion
-    header('Location: index.php');
-    exit;
+    $statement->execute(['%' . $searchTerm . '%']);
+    $cards = $statement->fetchAll();
+} else {
+    $sql = 'SELECT * FROM CardCatalogue';
+    $statement = $pdo->prepare($sql);
+    $statement->execute();
+    $cards = $statement->fetchAll();
 }
-
-// Fetch all cards
-$sql = 'SELECT * FROM CardCatalogue';
-$statement = $pdo->prepare($sql);
-$statement->execute();
-$cards = $statement->fetchAll();
 ?>
 
 <!DOCTYPE html>
@@ -30,6 +25,10 @@ $cards = $statement->fetchAll();
 </head>
 <body>
     <h1>Card Catalogue</h1>
+    <form action="index.php" method="GET">
+        <input type="text" name="q" placeholder="Search by Card Name" value="<?= htmlspecialchars($searchTerm) ?>">
+        <button type="submit">Search</button>
+    </form>
     <table>
         <tr>
             <th>Card ID</th>

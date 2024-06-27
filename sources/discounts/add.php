@@ -10,7 +10,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $statement = $pdo->prepare($sql);
     $statement->execute([$id, $type, $rate]);
 
-    header('Location: index.php');
+    header('Location: discounts.php');
 }
 ?>
 

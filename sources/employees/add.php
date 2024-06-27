@@ -13,7 +13,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $statement = $pdo->prepare($sql);
     $statement->execute([$id, $name, $gender, $phone, $email, $age]);
 
-    header('Location: index.php');
+    header('Location: employees.php');
 }
 ?>
 

@@ -3,12 +3,26 @@ include '../../service/db.php';
 
 $id = $_GET['id'];
 
+// Fetch transaction details
 $sql = 'SELECT * FROM Transactions WHERE TransactionID = ?';
 $statement = $pdo->prepare($sql);
 $statement->execute([$id]);
 $transaction = $statement->fetch();
 
+// Fetch data for Employee dropdown
+$sqlEmployees = 'SELECT EmployeeID, Name FROM Employees';
+$statementEmployees = $pdo->prepare($sqlEmployees);
+$statementEmployees->execute();
+$employees = $statementEmployees->fetchAll();
+
+// Fetch data for Discount dropdown
+$sqlDiscounts = 'SELECT DiscountID, DiscountType FROM Discount';
+$statementDiscounts = $pdo->prepare($sqlDiscounts);
+$statementDiscounts->execute();
+$discounts = $statementDiscounts->fetchAll();
+
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+    // Ambil data dari form
     $date = $_POST['Date'];
     $totalItems = $_POST['TotalItems'];
     $totalAmount = $_POST['TotalAmount'];
@@ -48,7 +62,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         }
     }
 
-    header('Location: index.php');
+    header('Location: t.php');
+    exit();
 }
 ?>
 
@@ -56,7 +71,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <link rel="stylesheet" href="../css/styles.css">
+    <link rel="stylesheet" href="../css/styles.css"> <!-- Pastikan path ini sesuai dengan struktur proyek Anda -->
     <title>Edit Transaction</title>
 </head>
 <body>
@@ -69,13 +84,30 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         <label for="TotalAmount">Total Amount:</label>
         <input type="number" step="0.01" name="TotalAmount" value="<?= htmlspecialchars($transaction['TotalAmount']) ?>" required><br>
         <label for="PaymentMethod">Payment Method:</label>
-        <input type="text" name="PaymentMethod" value="<?= htmlspecialchars($transaction['PaymentMethod']) ?>" required><br>
-        <label for="Employees_EmployeeID">Employee ID:</label>
-        <input type="text" name="Employees_EmployeeID" value="<?= htmlspecialchars($transaction['Employees_EmployeeID']) ?>" required><br>
+        <select name="PaymentMethod" required>
+            <option value="Credit Card" <?= ($transaction['PaymentMethod'] === 'Credit Card') ? 'selected' : '' ?>>Credit Card</option>
+            <option value="Cash" <?= ($transaction['PaymentMethod'] === 'Cash') ? 'selected' : '' ?>>Cash</option>
+            <option value="Debit" <?= ($transaction['PaymentMethod'] === 'Debit') ? 'selected' : '' ?>>Debit</option>
+        </select><br>
+        <label for="Employees_EmployeeID">Employee:</label>
+        <select name="Employees_EmployeeID" required>
+            <?php foreach ($employees as $employee) : ?>
+                <option value="<?= htmlspecialchars($employee['EmployeeID']) ?>" <?= ($employee['EmployeeID'] === $transaction['Employees_EmployeeID']) ? 'selected' : '' ?>>
+                    <?= htmlspecialchars($employee['Name']) ?>
+                </option>
+            <?php endforeach; ?>
+        </select><br>
         <label for="Customers_CustomerID">Customer ID:</label>
         <input type="text" name="Customers_CustomerID" value="<?= htmlspecialchars($transaction['Customers_CustomerID']) ?>" required><br>
         <label for="Discount_DiscountID">Discount ID (optional):</label>
-        <input type="text" name="Discount_DiscountID" value="<?= htmlspecialchars($transaction['Discount_DiscountID']) ?>"><br>
+        <select name="Discount_DiscountID">
+            <option value="">None</option>
+            <?php foreach ($discounts as $discount) : ?>
+                <option value="<?= htmlspecialchars($discount['DiscountID']) ?>" <?= ($discount['DiscountID'] === $transaction['Discount_DiscountID']) ? 'selected' : '' ?>>
+                    <?= htmlspecialchars($discount['DiscountType']) ?>
+                </option>
+            <?php endforeach; ?>
+        </select><br>
         <label for="Menu_MenuId">Menu Items (optional):</label>
         <select name="Menu_MenuId[]" multiple>
             <?php
@@ -84,7 +116,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             $statement->execute();
             $menus = $statement->fetchAll();
             foreach ($menus as $menu) {
-                echo '<option value="' . htmlspecialchars($menu['MenuId']) . '">' . htmlspecialchars($menu['MenuName']) . '</option>';
+                $selected = in_array($menu['MenuId'], explode(',', $transaction['Menu_MenuId'])) ? 'selected' : '';
+                echo '<option value="' . htmlspecialchars($menu['MenuId']) . '" ' . $selected . '>' . htmlspecialchars($menu['MenuName']) . '</option>';
             }
             ?>
         </select><br>
@@ -96,7 +129,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             $statement->execute();
             $merchandises = $statement->fetchAll();
             foreach ($merchandises as $merchandise) {
-                echo '<option value="' . htmlspecialchars($merchandise['ItemID']) . '">' . htmlspecialchars($merchandise['Name']) . '</option>';
+                $selected = in_array($merchandise['ItemID'], explode(',', $transaction['Merchandise_ItemID'])) ? 'selected' : '';
+                echo '<option value="' . htmlspecialchars($merchandise['ItemID']) . '" ' . $selected . '>' . htmlspecialchars($merchandise['Name']) . '</option>';
             }
             ?>
         </select><br>
