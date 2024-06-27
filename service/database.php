@@ -14,6 +14,4 @@ if ($db->connect_error) {
     die("error! ");
 }
 
-echo "DB Connected!";
-
 ?>

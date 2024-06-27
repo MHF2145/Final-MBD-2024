@@ -57,12 +57,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         // Process menu items and merchandise items if selected
         $menuItems = isset($_POST['Menu_MenuId']) ? $_POST['Menu_MenuId'] : [];
         $merchandiseItems = isset($_POST['Merchandise_ItemID']) ? $_POST['Merchandise_ItemID'] : [];
+        $cardItems = isset($_POST['CardCatalogue_CardID']) ? $_POST['CardCatalogue_CardID'] : [];
 
         // Insert into Transactions table
-        $sqlTransaction = "INSERT INTO Transactions (TransactionID, Date, TotalItems, TotalAmount, PaymentMethod, Employees_EmployeeID, Customers_CustomerID, Discount_DiscountID)
-                           VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+        $sqlTransaction = "INSERT INTO Transactions (TransactionID, Date, TotalItems, TotalAmount, PaymentMethod, Employees_EmployeeID, Customers_CustomerID, Discount_DiscountID, CardCatalogue_CardID)
+                           VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
         $statementTransaction = $pdo->prepare($sqlTransaction);
-        $statementTransaction->execute([$transactionID, $date, $totalItems, $totalAmount, $paymentMethod, $employeeID, $customerID, $discountID]);
+        $statementTransaction->execute([$transactionID, $date, $totalItems, $totalAmount, $paymentMethod, $employeeID, $customerID, $discountID, $CardCatalogue_CardID]);
 
         // Insert into Transaction_MenuItems junction table
         foreach ($menuItems as $menuItem) {
@@ -76,6 +77,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $sqlMerchandiseItem = "INSERT INTO Transactions_Merchandise (Transactions_TransactionID, Merchandise_ItemID) VALUES (?, ?)";
             $statementMerchandiseItem = $pdo->prepare($sqlMerchandiseItem);
             $statementMerchandiseItem->execute([$transactionID, $merchandiseItem]);
+        }
+
+        // Insert into Transaction_CardCatalogue junction table
+        foreach ($cardItems as $cardItem) {
+            $sqlCardItem = "INSERT INTO Transactions_CardCatalogue (Transactions_TransactionID, CardCatalogue_CardID) VALUES (?, ?)";
+            $statementCardItem = $pdo->prepare($sqlCardItem);
+            $statementCardItem->execute([$transactionID, $cardItem]);
         }
 
         // Redirect after successful insertion
@@ -92,8 +100,75 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="../css/styles.css"> <!-- Adjust path as per your project structure -->
     <title>Add Transaction</title>
+    <style>
+        body {
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+            justify-content: center;
+            align-items: center;
+            font-family: Arial, sans-serif;
+            background-color: #f3f4f6;
+        }
+
+        form {
+            background-color: #ffffff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            width: 300px;
+            max-width: 100%;
+        }
+
+        label {
+            font-weight: bold;
+            margin-bottom: 8px;
+        }
+
+        input[type="text"],
+        input[type="number"],
+        input[type="datetime-local"],
+        select {
+            width: calc(100% - 20px);
+            padding: 8px;
+            margin-bottom: 12px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+
+        button[type="submit"] {
+            background-color: #007bff;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 16px;
+            margin-top: 10px;
+            cursor: pointer;
+            border-radius: 4px;
+        }
+
+        button[type="submit"]:hover {
+            background-color: #0056b3;
+        }
+
+        a {
+            display: block;
+            margin-top: 10px;
+            text-align: center;
+            color: #007bff;
+            text-decoration: none;
+        }
+
+        a:hover {
+            text-decoration: underline;
+        }
+    </style>
 </head>
 
 <body>
@@ -113,34 +188,28 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             <option value="Cash" <?= ($paymentMethod == 'Cash') ? 'selected' : '' ?>>Cash</option>
             <option value="Debit" <?= ($paymentMethod == 'Debit') ? 'selected' : '' ?>>Debit</option>
         </select><br>
-        <label for="Employees_EmployeeID">Employee ID:</label>
+        <label for="Employees_EmployeeID">Employee:</label>
         <select name="Employees_EmployeeID" required>
             <?php foreach ($employees as $employee) : ?>
-                <option value="<?= htmlspecialchars($employee['EmployeeID']) ?>" <?= ($employeeID == $employee['EmployeeID']) ? 'selected' : '' ?>>
-                    <?= htmlspecialchars($employee['EmployeeID']) ?> - <?= htmlspecialchars($employee['Name']) ?>
-                </option>
+                <option value="<?= htmlspecialchars($employee['EmployeeID']) ?>"><?= htmlspecialchars($employee['Name']) ?></option>
             <?php endforeach; ?>
         </select><br>
-        <label for="Customers_CustomerID">Customer ID:</label>
+        <label for="Customers_CustomerID">Customer:</label>
         <select name="Customers_CustomerID" required>
             <?php foreach ($customers as $customer) : ?>
-                <option value="<?= htmlspecialchars($customer['CustomerID']) ?>" <?= ($customerID == $customer['CustomerID']) ? 'selected' : '' ?>>
-                    <?= htmlspecialchars($customer['CustomerID']) ?> - <?= htmlspecialchars($customer['Name']) ?>
-                </option>
+                <option value="<?= htmlspecialchars($customer['CustomerID']) ?>"><?= htmlspecialchars($customer['Name']) ?></option>
             <?php endforeach; ?>
         </select><br>
-        <label for="Discount_DiscountID">Discount ID (optional):</label>
+        <label for="Discount_DiscountID">Discount (optional):</label>
         <select name="Discount_DiscountID">
             <option value="">-- Select Discount --</option>
             <?php foreach ($discounts as $discount) : ?>
-                <option value="<?= htmlspecialchars($discount['DiscountID']) ?>" <?= ($discountID == $discount['DiscountID']) ? 'selected' : '' ?>>
-                    <?= htmlspecialchars($discount['DiscountID']) ?> - <?= htmlspecialchars($discount['DiscountType']) ?>
-                </option>
+                <option value="<?= htmlspecialchars($discount['DiscountID']) ?>"><?= htmlspecialchars($discount['DiscountType']) ?></option>
             <?php endforeach; ?>
         </select><br>
         <label for="Menu_MenuId">Menu Item (optional):</label>
         <select name="Menu_MenuId">
-            <option value="">-- Select Menu Item --</option>
+        <option value="">-- Select Menu Item --</option>
             <?php foreach ($menus as $menu) : ?>
                 <option value="<?= htmlspecialchars($menu['MenuId']) ?>"><?= htmlspecialchars($menu['MenuName']) ?></option>
             <?php endforeach; ?>
@@ -152,7 +221,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 <option value="<?= htmlspecialchars($merchandise['ItemID']) ?>"><?= htmlspecialchars($merchandise['Name']) ?></option>
             <?php endforeach; ?>
         </select><br>
-                <label for="CardCatalogue_CardID">Card Catalogue (optional):</label>
+        <label for="CardCatalogue_CardID">Card Catalogue (optional):</label>
         <select name="CardCatalogue_CardID">
             <option value="">-- Select Card --</option>
             <?php foreach ($cards as $card) : ?>
