@@ -39,7 +39,7 @@ $customers = $statementCustomers->fetchAll();
 
 // Initialize variables for form submission
 $transactionID = $date = $totalItems = $totalAmount = $paymentMethod = $employeeID = $customerID = $discountID = '';
-$menuItems = $merchandiseItems = [];
+$menuItems = $merchandiseItems = $cardItems = [];
 
 // Process form submission
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
@@ -60,10 +60,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $cardItems = isset($_POST['CardCatalogue_CardID']) ? $_POST['CardCatalogue_CardID'] : [];
 
         // Insert into Transactions table
-        $sqlTransaction = "INSERT INTO Transactions (TransactionID, Date, TotalItems, TotalAmount, PaymentMethod, Employees_EmployeeID, Customers_CustomerID, Discount_DiscountID, CardCatalogue_CardID)
-                           VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
+        $sqlTransaction = "INSERT INTO Transactions (TransactionID, Date, TotalItems, TotalAmount, PaymentMethod, Employees_EmployeeID, Customers_CustomerID, Discount_DiscountID)
+                           VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
         $statementTransaction = $pdo->prepare($sqlTransaction);
-        $statementTransaction->execute([$transactionID, $date, $totalItems, $totalAmount, $paymentMethod, $employeeID, $customerID, $discountID, $CardCatalogue_CardID]);
+        $statementTransaction->execute([$transactionID, $date, $totalItems, $totalAmount, $paymentMethod, $employeeID, $customerID, $discountID]);
 
         // Insert into Transaction_MenuItems junction table
         foreach ($menuItems as $menuItem) {
@@ -200,30 +200,27 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 <option value="<?= htmlspecialchars($customer['CustomerID']) ?>"><?= htmlspecialchars($customer['Name']) ?></option>
             <?php endforeach; ?>
         </select><br>
-        <label for="Discount_DiscountID">Discount (optional):</label>
+        <label for="Discount_DiscountID">Discount:</label>
         <select name="Discount_DiscountID">
-            <option value="">-- Select Discount --</option>
+            <option value="">None</option>
             <?php foreach ($discounts as $discount) : ?>
                 <option value="<?= htmlspecialchars($discount['DiscountID']) ?>"><?= htmlspecialchars($discount['DiscountType']) ?></option>
             <?php endforeach; ?>
         </select><br>
-        <label for="Menu_MenuId">Menu Item (optional):</label>
-        <select name="Menu_MenuId">
-        <option value="">-- Select Menu Item --</option>
+        <label for="Menu_MenuId">Menu Items:</label>
+        <select name="Menu_MenuId[]" multiple>
             <?php foreach ($menus as $menu) : ?>
                 <option value="<?= htmlspecialchars($menu['MenuId']) ?>"><?= htmlspecialchars($menu['MenuName']) ?></option>
             <?php endforeach; ?>
         </select><br>
-        <label for="Merchandise_ItemID">Merchandise Item (optional):</label>
-        <select name="Merchandise_ItemID">
-            <option value="">-- Select Merchandise Item --</option>
+        <label for="Merchandise_ItemID">Merchandise Items:</label>
+        <select name="Merchandise_ItemID[]" multiple>
             <?php foreach ($merchandises as $merchandise) : ?>
                 <option value="<?= htmlspecialchars($merchandise['ItemID']) ?>"><?= htmlspecialchars($merchandise['Name']) ?></option>
             <?php endforeach; ?>
         </select><br>
-        <label for="CardCatalogue_CardID">Card Catalogue (optional):</label>
-        <select name="CardCatalogue_CardID">
-            <option value="">-- Select Card --</option>
+        <label for="CardCatalogue_CardID">Card Items:</label>
+        <select name="CardCatalogue_CardID[]" multiple>
             <?php foreach ($cards as $card) : ?>
                 <option value="<?= htmlspecialchars($card['CardID']) ?>"><?= htmlspecialchars($card['CardName']) ?></option>
             <?php endforeach; ?>

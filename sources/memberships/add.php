@@ -1,5 +1,6 @@
 <?php
 include '../../service/db.php';
+
 // Fetch all customers
 $sql = 'SELECT CustomerID, Name FROM Customers';
 $statement = $pdo->prepare($sql);
@@ -12,11 +13,18 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $rank = $_POST['Rank'];
     $joinDate = $_POST['JoinDate'];
 
+    // Insert new membership
     $sql = 'INSERT INTO Membership (MembershipID, CustomerID, Rank, JoinDate) VALUES (?, ?, ?, ?)';
     $statement = $pdo->prepare($sql);
     $statement->execute([$id, $customerID, $rank, $joinDate]);
 
+    // Update customer data
+    $sql = 'UPDATE Customers SET Membership_MembershipID = ? WHERE CustomerID = ?';
+    $statement = $pdo->prepare($sql);
+    $statement->execute([$id, $customerID]);
+
     header('Location: memberships.php');
+    exit;
 }
 ?>
 
@@ -94,11 +102,15 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         <label for="CustomerID">Customer ID:</label>
         <select name="CustomerID" required>
             <?php foreach ($customers as $customer) : ?>
-                <option value="<?= htmlspecialchars($customer['CustomerID']) ?>"><?= htmlspecialchars($customer['CustomerID']) ?></option>
+                <option value="<?= htmlspecialchars($customer['CustomerID']) ?>"><?= htmlspecialchars($customer['CustomerID']) ?> - <?= htmlspecialchars($customer['Name']) ?></option>
             <?php endforeach; ?>
         </select><br>
         <label for="Rank">Rank:</label>
-        <input type="text" name="Rank" required><br>
+        <select name="Rank" required>
+            <option value="Bronze">Bronze</option>
+            <option value="Silver">Silver</option>
+            <option value="Gold">Gold</option>
+        </select><br>
         <label for="JoinDate">Join Date:</label>
         <input type="datetime-local" name="JoinDate" required><br>
         <button type="submit">Add Membership</button>

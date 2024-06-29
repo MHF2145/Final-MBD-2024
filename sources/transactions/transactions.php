@@ -20,7 +20,14 @@ $transactions = $statement->fetchAll();
     <link rel="stylesheet" href="../css/styles.css"> <!-- Pastikan path ini sesuai dengan struktur proyek Anda -->
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
     <style>
+        html, body {
+            height: 100%;
+            margin: 0;
+            display: flex;
+            flex-direction: column;
+        }
         .container {
+            flex: 1;
             max-width: 1200px;
             margin: auto;
             padding: 20px;
@@ -37,6 +44,13 @@ $transactions = $statement->fetchAll();
         }
         .actions {
             white-space: nowrap;
+        }
+        .footer {
+            background-color: #2d3748;
+            color: white;
+            text-align: center;
+            padding: 1rem;
+            margin-top: auto;
         }
     </style>
 </head>
@@ -87,17 +101,17 @@ $transactions = $statement->fetchAll();
                     <td><?= htmlspecialchars($transaction['Customers_CustomerID']) ?></td>
                     <td><?= htmlspecialchars($transaction['Discount_DiscountID']) ?></td>
                     <td class="actions">
-                        <a href="edit.php?id=<?= htmlspecialchars($transaction['TransactionID']) ?>" class="text-blue-500 hover:text-blue-700">Edit</a>
-                        <a href="transactions.php?delete_id=<?= htmlspecialchars($transaction['TransactionID']) ?>" onclick="return confirm('Are you sure you want to delete this transaction?')" class="ml-2 text-red-500 hover:text-red-700">Delete</a>
+                        <a href="transactions.php?delete_id=<?= htmlspecialchars($transaction['TransactionID']) ?>" onclick="return confirm('Are you sure you want to delete this transaction?')" class="text-red-500 hover:text-red-700">Delete</a>
                     </td>
                 </tr>
                 <?php endforeach; ?>
             </tbody>
         </table>
+        <a href="overview.php" class="block mt-8 text-center text-blue-500 hover:text-blue-700">Go to Overview</a>
         <a href="../../dashboard.php" class="block mt-8 text-center text-blue-500 hover:text-blue-700">Back to Main Dashboard</a>
     </div>
 
-    <footer class="footer bg-gray-800 text-white text-center py-4 mt-auto">
+    <footer class="footer">
         <?php include '../../layout/footer.html'; ?>
     </footer>
 

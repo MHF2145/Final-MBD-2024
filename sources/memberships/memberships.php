@@ -5,6 +5,12 @@ include '../../service/db.php';
 if (isset($_GET['delete_id'])) {
     $delete_id = $_GET['delete_id'];
 
+    // Set the Membership_MembershipID to NULL for customers with the membership to be deleted
+    $sql = 'UPDATE Customers SET Membership_MembershipID = NULL WHERE Membership_MembershipID = ?';
+    $statement = $pdo->prepare($sql);
+    $statement->execute([$delete_id]);
+
+    // Delete the membership
     $sql = 'DELETE FROM Membership WHERE MembershipID = ?';
     $statement = $pdo->prepare($sql);
     $statement->execute([$delete_id]);
@@ -57,7 +63,6 @@ $memberships = $statement->fetchAll();
                         <td class="border border-gray-300 px-4 py-2"><?= htmlspecialchars($membership['Rank']) ?></td>
                         <td class="border border-gray-300 px-4 py-2"><?= htmlspecialchars($membership['JoinDate']) ?></td>
                         <td class="border border-gray-300 px-4 py-2">
-                            <a href="edit.php?id=<?= htmlspecialchars($membership['MembershipID']) ?>" class="text-blue-500 hover:text-blue-700">Edit</a>
                             <a href="memberships.php?delete_id=<?= htmlspecialchars($membership['MembershipID']) ?>" onclick="return confirm('Are you sure you want to delete this membership?');" class="ml-2 text-red-500 hover:text-red-700">Delete</a>
                         </td>
                     </tr>

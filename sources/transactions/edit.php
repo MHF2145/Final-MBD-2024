@@ -1,141 +1,215 @@
 <?php
 include '../../service/db.php';
 
-$id = $_GET['id'];
+// Fetch transaction details for the given TransactionID
+$transactionID = isset($_GET['id']) ? $_GET['id'] : '';
+$sqlTransaction = 'SELECT * FROM Transactions WHERE TransactionID = ?';
+$statementTransaction = $pdo->prepare($sqlTransaction);
+$statementTransaction->execute([$transactionID]);
+$transaction = $statementTransaction->fetch();
 
-// Fetch transaction details
-$sql = 'SELECT * FROM Transactions WHERE TransactionID = ?';
-$statement = $pdo->prepare($sql);
-$statement->execute([$id]);
-$transaction = $statement->fetch();
+if (!$transaction) {
+    echo "Transaction not found.";
+    exit;
+}
 
-// Fetch data for Employee dropdown
+// Fetch employees for select options
 $sqlEmployees = 'SELECT EmployeeID, Name FROM Employees';
 $statementEmployees = $pdo->prepare($sqlEmployees);
 $statementEmployees->execute();
 $employees = $statementEmployees->fetchAll();
 
-// Fetch data for Discount dropdown
+// Fetch card catalogue for select options
+$sqlCardCatalogue = 'SELECT CardID, CardName FROM CardCatalogue';
+$statementCardCatalogue = $pdo->prepare($sqlCardCatalogue);
+$statementCardCatalogue->execute();
+$cards = $statementCardCatalogue->fetchAll();
+
+// Fetch menu items for select options
+$sqlMenu = 'SELECT MenuId, MenuName FROM Menu';
+$statementMenu = $pdo->prepare($sqlMenu);
+$statementMenu->execute();
+$menus = $statementMenu->fetchAll();
+
+// Fetch merchandise items for select options
+$sqlMerchandise = 'SELECT ItemID, Name FROM Merchandise';
+$statementMerchandise = $pdo->prepare($sqlMerchandise);
+$statementMerchandise->execute();
+$merchandises = $statementMerchandise->fetchAll();
+
+// Fetch discounts for select options
 $sqlDiscounts = 'SELECT DiscountID, DiscountType FROM Discount';
 $statementDiscounts = $pdo->prepare($sqlDiscounts);
 $statementDiscounts->execute();
 $discounts = $statementDiscounts->fetchAll();
 
-if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-    // Ambil data dari form
-    $date = $_POST['Date'];
-    $totalItems = $_POST['TotalItems'];
-    $totalAmount = $_POST['TotalAmount'];
-    $paymentMethod = $_POST['PaymentMethod'];
-    $employeeID = $_POST['Employees_EmployeeID'];
-    $customerID = $_POST['Customers_CustomerID'];
-    $discountID = $_POST['Discount_DiscountID'] ?: NULL;
+// Fetch customers for select options
+$sqlCustomers = 'SELECT CustomerID, Name FROM Customers';
+$statementCustomers = $pdo->prepare($sqlCustomers);
+$statementCustomers->execute();
+$customers = $statementCustomers->fetchAll();
 
-    // Update Transactions table
-    $sql = 'UPDATE Transactions SET Date = ?, TotalItems = ?, TotalAmount = ?, PaymentMethod = ?, Employees_EmployeeID = ?, Customers_CustomerID = ?, Discount_DiscountID = ? WHERE TransactionID = ?';
-    $statement = $pdo->prepare($sql);
-    $statement->execute([$date, $totalItems, $totalAmount, $paymentMethod, $employeeID, $customerID, $discountID, $id]);
+// Initialize variables for form submission
+$date = $transaction['Date'];
+$totalItems = $transaction['TotalItems'];
+$totalAmount = $transaction['TotalAmount'];
+$paymentMethod = $transaction['PaymentMethod'];
+$employeeID = $transaction['Employees_EmployeeID'];
+$customerID = $transaction['Customers_CustomerID'];
+$discountID = $transaction['Discount_DiscountID'];
+$cardCatalogueID = $transaction['CardCatalogue_CardID'];
 
-    // Handle associated Menu items
-    $sql = 'DELETE FROM Transactions_Menu WHERE Transactions_TransactionID = ?';
-    $statement = $pdo->prepare($sql);
-    $statement->execute([$id]);
+// Process form submission
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    try {
+        // Retrieve form data
+        $date = $_POST['Date'];
+        $totalItems = $_POST['TotalItems'];
+        $totalAmount = $_POST['TotalAmount'];
+        $paymentMethod = $_POST['PaymentMethod'];
+        $employeeID = $_POST['Employees_EmployeeID'];
+        $customerID = $_POST['Customers_CustomerID'];
+        $discountID = isset($_POST['Discount_DiscountID']) ? $_POST['Discount_DiscountID'] : null;
+        $cardCatalogueID = isset($_POST['CardCatalogue_CardID']) ? $_POST['CardCatalogue_CardID'] : null;
 
-    if (!empty($_POST['Menu_MenuId'])) {
-        foreach ($_POST['Menu_MenuId'] as $menuID) {
-            $sql = 'INSERT INTO Transactions_Menu (Transactions_TransactionID, Menu_MenuId) VALUES (?, ?)';
-            $statement = $pdo->prepare($sql);
-            $statement->execute([$id, $menuID]);
-        }
+        // Update Transactions table
+        $sqlUpdateTransaction = "UPDATE Transactions 
+                                 SET Date = ?, TotalItems = ?, TotalAmount = ?, PaymentMethod = ?, Employees_EmployeeID = ?, Customers_CustomerID = ?, Discount_DiscountID = ?, CardCatalogue_CardID = ?
+                                 WHERE TransactionID = ?";
+        $statementUpdateTransaction = $pdo->prepare($sqlUpdateTransaction);
+        $statementUpdateTransaction->execute([$date, $totalItems, $totalAmount, $paymentMethod, $employeeID, $customerID, $discountID, $cardCatalogueID, $transactionID]);
+
+        // Redirect after successful update
+        header('Location: transactions.php');
+        exit;
+    } catch (PDOException $e) {
+        echo "Error: " . $e->getMessage();
     }
-
-    // Handle associated Merchandise items
-    $sql = 'DELETE FROM Transactions_Merchandise WHERE Transactions_TransactionID = ?';
-    $statement = $pdo->prepare($sql);
-    $statement->execute([$id]);
-
-    if (!empty($_POST['Merchandise_ItemID'])) {
-        foreach ($_POST['Merchandise_ItemID'] as $merchandiseID) {
-            $sql = 'INSERT INTO Transactions_Merchandise (Transactions_TransactionID, Merchandise_ItemID) VALUES (?, ?)';
-            $statement = $pdo->prepare($sql);
-            $statement->execute([$id, $merchandiseID]);
-        }
-    }
-
-    header('Location: t.php');
-    exit();
 }
 ?>
 
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
-    <link rel="stylesheet" href="../css/styles.css"> <!-- Pastikan path ini sesuai dengan struktur proyek Anda -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../css/styles.css"> <!-- Adjust path as per your project structure -->
     <title>Edit Transaction</title>
+    <style>
+        body {
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+            justify-content: center;
+            align-items: center;
+            font-family: Arial, sans-serif;
+            background-color: #f3f4f6;
+        }
+
+        form {
+            background-color: #ffffff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            width: 300px;
+            max-width: 100%;
+        }
+
+        label {
+            font-weight: bold;
+            margin-bottom: 8px;
+        }
+
+        input[type="text"],
+        input[type="number"],
+        input[type="datetime-local"],
+        select {
+            width: calc(100% - 20px);
+            padding: 8px;
+            margin-bottom: 12px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+
+        button[type="submit"] {
+            background-color: #007bff;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 16px;
+            margin-top: 10px;
+            cursor: pointer;
+            border-radius: 4px;
+        }
+
+        button[type="submit"]:hover {
+            background-color: #0056b3;
+        }
+
+        a {
+            display: block;
+            margin-top: 10px;
+            text-align: center;
+            color: #007bff;
+            text-decoration: none;
+        }
+
+        a:hover {
+            text-decoration: underline;
+        }
+    </style>
 </head>
+
 <body>
     <h1>Edit Transaction</h1>
     <form method="POST">
+        <label for="TransactionID">Transaction ID:</label>
+        <input type="text" name="TransactionID" value="<?= htmlspecialchars($transactionID) ?>" disabled><br>
         <label for="Date">Date:</label>
-        <input type="datetime-local" name="Date" value="<?= htmlspecialchars($transaction['Date']) ?>" required><br>
+        <input type="datetime-local" name="Date" value="<?= htmlspecialchars($date) ?>" required><br>
         <label for="TotalItems">Total Items:</label>
-        <input type="number" name="TotalItems" value="<?= htmlspecialchars($transaction['TotalItems']) ?>" required><br>
+        <input type="number" name="TotalItems" value="<?= htmlspecialchars($totalItems) ?>" required><br>
         <label for="TotalAmount">Total Amount:</label>
-        <input type="number" step="0.01" name="TotalAmount" value="<?= htmlspecialchars($transaction['TotalAmount']) ?>" required><br>
+        <input type="number" step="0.01" name="TotalAmount" value="<?= htmlspecialchars($totalAmount) ?>" required><br>
         <label for="PaymentMethod">Payment Method:</label>
         <select name="PaymentMethod" required>
-            <option value="Credit Card" <?= ($transaction['PaymentMethod'] === 'Credit Card') ? 'selected' : '' ?>>Credit Card</option>
-            <option value="Cash" <?= ($transaction['PaymentMethod'] === 'Cash') ? 'selected' : '' ?>>Cash</option>
-            <option value="Debit" <?= ($transaction['PaymentMethod'] === 'Debit') ? 'selected' : '' ?>>Debit</option>
+            <option value="Credit Card" <?= ($paymentMethod == 'Credit Card') ? 'selected' : '' ?>>Credit Card</option>
+            <option value="Cash" <?= ($paymentMethod == 'Cash') ? 'selected' : '' ?>>Cash</option>
+            <option value="Debit" <?= ($paymentMethod == 'Debit') ? 'selected' : '' ?>>Debit</option>
         </select><br>
         <label for="Employees_EmployeeID">Employee:</label>
         <select name="Employees_EmployeeID" required>
             <?php foreach ($employees as $employee) : ?>
-                <option value="<?= htmlspecialchars($employee['EmployeeID']) ?>" <?= ($employee['EmployeeID'] === $transaction['Employees_EmployeeID']) ? 'selected' : '' ?>>
-                    <?= htmlspecialchars($employee['Name']) ?>
-                </option>
+                <option value="<?= htmlspecialchars($employee['EmployeeID']) ?>" <?= ($employeeID == $employee['EmployeeID']) ? 'selected' : '' ?>><?= htmlspecialchars($employee['Name']) ?></option>
             <?php endforeach; ?>
         </select><br>
-        <label for="Customers_CustomerID">Customer ID:</label>
-        <input type="text" name="Customers_CustomerID" value="<?= htmlspecialchars($transaction['Customers_CustomerID']) ?>" required><br>
-        <label for="Discount_DiscountID">Discount ID (optional):</label>
+        <label for="Customers_CustomerID">Customer:</label>
+        <select name="Customers_CustomerID" required>
+            <?php foreach ($customers as $customer) : ?>
+                <option value="<?= htmlspecialchars($customer['CustomerID']) ?>" <?= ($customerID == $customer['CustomerID']) ? 'selected' : '' ?>><?= htmlspecialchars($customer['Name']) ?></option>
+            <?php endforeach; ?>
+        </select><br>
+        <label for="Discount_DiscountID">Discount (optional):</label>
         <select name="Discount_DiscountID">
-            <option value="">None</option>
+            <option value="">-- Select Discount --</option>
             <?php foreach ($discounts as $discount) : ?>
-                <option value="<?= htmlspecialchars($discount['DiscountID']) ?>" <?= ($discount['DiscountID'] === $transaction['Discount_DiscountID']) ? 'selected' : '' ?>>
-                    <?= htmlspecialchars($discount['DiscountType']) ?>
-                </option>
+                <option value="<?= htmlspecialchars($discount['DiscountID']) ?>" <?= ($discountID == $discount['DiscountID']) ? 'selected' : '' ?>><?= htmlspecialchars($discount['DiscountType']) ?></option>
             <?php endforeach; ?>
         </select><br>
-        <label for="Menu_MenuId">Menu Items (optional):</label>
-        <select name="Menu_MenuId[]" multiple>
-            <?php
-            $sql = 'SELECT MenuId, MenuName FROM Menu';
-            $statement = $pdo->prepare($sql);
-            $statement->execute();
-            $menus = $statement->fetchAll();
-            foreach ($menus as $menu) {
-                $selected = in_array($menu['MenuId'], explode(',', $transaction['Menu_MenuId'])) ? 'selected' : '';
-                echo '<option value="' . htmlspecialchars($menu['MenuId']) . '" ' . $selected . '>' . htmlspecialchars($menu['MenuName']) . '</option>';
-            }
-            ?>
+        <label for="CardCatalogue_CardID">Card Catalogue (optional):</label>
+        <select name="CardCatalogue_CardID">
+            <option value="">-- Select Card --</option>
+            <?php foreach ($cards as $card) : ?>
+                <option value="<?= htmlspecialchars($card['CardID']) ?>" <?= ($cardCatalogueID == $card['CardID']) ? 'selected' : '' ?>><?= htmlspecialchars($card['CardName']) ?></option>
+            <?php endforeach; ?>
         </select><br>
-        <label for="Merchandise_ItemID">Merchandise Items (optional):</label>
-        <select name="Merchandise_ItemID[]" multiple>
-            <?php
-            $sql = 'SELECT ItemID, Name FROM Merchandise';
-            $statement = $pdo->prepare($sql);
-            $statement->execute();
-            $merchandises = $statement->fetchAll();
-            foreach ($merchandises as $merchandise) {
-                $selected = in_array($merchandise['ItemID'], explode(',', $transaction['Merchandise_ItemID'])) ? 'selected' : '';
-                echo '<option value="' . htmlspecialchars($merchandise['ItemID']) . '" ' . $selected . '>' . htmlspecialchars($merchandise['Name']) . '</option>';
-            }
-            ?>
-        </select><br>
-        <button type="submit">Save Changes</button>
+        <button type="submit">Update Transaction</button>
     </form>
     <a href="transactions.php">Back to Transactions</a>
 </body>
+
 </html>

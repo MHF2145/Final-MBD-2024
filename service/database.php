@@ -13,5 +13,4 @@ if ($db->connect_error) {
     echo "db rusak";
     die("error! ");
 }
-
 ?>

@@ -28,9 +28,9 @@
         <div class="text-center mb-4">
             <select id="productSelect" class="px-4 py-2 border rounded" onchange="navigateToPage()">
                 <option value="">Select a product...</option>
-                <option value="card_catalogue/index.php">Card Catalogue</option>
-                <option value="merchandise/index.php">Merchandise</option>
-                <option value="menu/index.php">Menu</option>
+                <option value="card.php">Card Catalogue</option>
+                <option value="merchandise.php">Merchandise</option>
+                <option value="menu.php">Menu</option>
             </select>
         </div>
         <a href="../../dashboard.php" class="block text-center mt-4 text-blue-500 hover:text-blue-700">Back to Main Dashboard</a>

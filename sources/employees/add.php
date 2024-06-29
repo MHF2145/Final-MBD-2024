@@ -23,35 +23,43 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="../css/styles.css">
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
     <title>Add Employee</title>
     <style>
         body {
+            font-family: Arial, sans-serif;
+            background-color: #f3f4f6;
             display: flex;
             flex-direction: column;
             min-height: 100vh;
-            justify-content: center;
-            align-items: center;
-            font-family: Arial, sans-serif;
-            background-color: #f3f4f6;
         }
-        form {
-            background-color: #ffffff;
+        .container {
+            width: 100%;
+            max-width: 800px;
+            margin: auto;
             padding: 20px;
+            flex: 1; /* Flex grow to push footer down */
+        }
+        .card {
+            background-color: #ffffff;
             border-radius: 8px;
             box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-            width: 300px;
-            max-width: 100%;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+        .form-group {
+            margin-bottom: 15px;
         }
         label {
             font-weight: bold;
+            display: block;
             margin-bottom: 8px;
         }
         input[type="text"],
         input[type="email"],
         input[type="number"] {
-            width: calc(100% - 20px);
-            padding: 8px;
-            margin-bottom: 12px;
+            width: 100%;
+            padding: 10px;
             border: 1px solid #ccc;
             border-radius: 4px;
         }
@@ -59,7 +67,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             background-color: #007bff;
             color: white;
             border: none;
-            padding: 10px 20px;
+            padding: 12px 20px;
             text-align: center;
             text-decoration: none;
             display: inline-block;
@@ -71,35 +79,65 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         button[type="submit"]:hover {
             background-color: #0056b3;
         }
-        a {
-            display: block;
+        .back-link {
+            display: inline-block;
             margin-top: 10px;
-            text-align: center;
             color: #007bff;
             text-decoration: none;
         }
-        a:hover {
+        .back-link:hover {
             text-decoration: underline;
+        }
+        footer {
+            background-color: #333;
+            color: white;
+            text-align: center;
+            padding: 10px 0;
+            width: 100%;
         }
     </style>
 </head>
 <body>
-    <h1>Add Employee</h1>
-    <form method="POST">
-        <label for="EmployeeID">Employee ID:</label>
-        <input type="text" name="EmployeeID" required><br>
-        <label for="Name">Name:</label>
-        <input type="text" name="Name" required><br>
-        <label for="Gender">Gender:</label>
-        <input type="text" name="Gender" required><br>
-        <label for="PhoneNumber">Phone Number:</label>
-        <input type="text" name="PhoneNumber" required><br>
-        <label for="Email">Email:</label>
-        <input type="email" name="Email" required><br>
-        <label for="Age">Age:</label>
-        <input type="number" name="Age" required><br>
-        <button type="submit">Add Employee</button>
-    </form>
-    <a href="employees.php">Back to Employees</a>
+
+<div class="container">
+    <div class="card">
+        <h1 class="text-3xl font-bold mb-4 text-center">Add Employee</h1>
+        <form method="POST">
+            <div class="form-group">
+                <label for="EmployeeID">Employee ID:</label>
+                <input type="text" id="EmployeeID" name="EmployeeID" required>
+            </div>
+            <div class="form-group">
+                <label for="Name">Name:</label>
+                <input type="text" id="Name" name="Name" required>
+            </div>
+            <div class="form-group">
+                <label for="Gender">Gender:</label>
+                <input type="text" id="Gender" name="Gender" required>
+            </div>
+            <div class="form-group">
+                <label for="PhoneNumber">Phone Number:</label>
+                <input type="text" id="PhoneNumber" name="PhoneNumber" required>
+            </div>
+            <div class="form-group">
+                <label for="Email">Email:</label>
+                <input type="email" id="Email" name="Email" required>
+            </div>
+            <div class="form-group">
+                <label for="Age">Age:</label>
+                <input type="number" id="Age" name="Age" required>
+            </div>
+            <div class="form-group">
+                <button type="submit">Add Employee</button>
+            </div>
+        </form>
+        <a href="employees.php" class="back-link">Back to Employees</a>
+    </div>
+</div>
+
+<footer>
+    <?php include '../../layout/footer.html'; ?>
+</footer>
+
 </body>
 </html>
